@@ -11,7 +11,8 @@ import (
 
 	"github.com/dullgiulio/pingo"
 
-	nan "nanocloud.com/lib/libnan"
+	// vendor this dependency
+	nan "nanocloud.com/plugins/iaas/libnan"
 )
 
 type IaasConfig struct {
