@@ -122,14 +122,28 @@ func (p *Iaas) ListRunningVm(jsonParams string, _outMsg *string) error {
 
 	// TODO: Lots of Data aren't from iaas API
 	for _, vmName := range response.Result.AvailableVMNames {
+
+		locked = false
 		if strings.Contains(vmName, "windows") {
-			icon = "windows"
-			locked = false
-			displayName = "Windows Applications"
+			if strings.Contains(vmName, "winapps") {
+				icon = "settings_applications"
+				displayName = "Execution environment"
+			} else {
+				icon = "windows"
+				displayName = "Windows Active Directory"
+			}
 		} else {
-			icon = "apps"
-			locked = true
-			displayName = "Haptic"
+			if strings.Contains(vmName, "drive") {
+				icon = "storage"
+				displayName = "Drive"
+			} else if strings.Contains(vmName, "licence") {
+				icon = "vpn_lock"
+				displayName = "Windows Licence service"
+			} else {
+				icon = "apps"
+				locked = true
+				displayName = "Haptic"
+			}
 		}
 
 		if stringInSlice(vmName, response.Result.RunningVmNames) {
