@@ -291,25 +291,17 @@ func (p *Iaas) StartVm(jsonParams string, _outMsg *string) error {
 	return nil
 }
 
-func (p *Iaas) StopVm(jsonParams string, _outMsg *string) error {
+func (p *Iaas) StopVm(vmName string, _outMsg *string) error {
 
 	var (
-		params map[string]string
-		vmName string
+		err    error
+		params = map[string]string{
+			"Name": vmName,
+		}
 	)
 
-	err := json.Unmarshal([]byte(jsonParams), &vmName)
-	if err != nil {
-		r := nan.NewExitCode(0, "ERROR: failed to unmarshal Iaas.AccountParams : "+err.Error())
-		log.Printf(r.Message) // for on-screen debug output
-		*_outMsg = r.ToJson() // return codes for IPC should use JSON as much as possible
-		return nil
-	}
-
-	params["vmname"] = vmName
-
 	*_outMsg, err = jsonRpcRequest(
-		g_IaasConfig.Url,
+		fmt.Sprintf("%s:%s", g_IaasConfig.Url, g_IaasConfig.Port),
 		"Iaas.Stop",
 		params,
 	)
