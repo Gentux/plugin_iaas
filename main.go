@@ -318,20 +318,20 @@ func jsonRpcRequest(url string, method string, param map[string]string) (string,
 		"params":  []map[string]string{0: param},
 	})
 	if err != nil {
-		log.Fatalf("Marshal: %v", err)
+		log.Println("jsonRpcRequest-Marshal: ", err)
 		return "", err
 	}
 
 	resp, err := http.Post(url, "application/json", strings.NewReader(string(data)))
 	if err != nil {
-		log.Fatalf("Post: %v", err)
+		log.Println("jsonRpcRequest-Post: ", err)
 		return "", err
 	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatalf("ReadAll: %v", err)
+		log.Println("jsonRpcRequest-ReadAll: ", err)
 		return "", err
 	}
 
